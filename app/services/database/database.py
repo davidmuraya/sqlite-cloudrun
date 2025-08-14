@@ -6,6 +6,12 @@ from app.config.main import get_settings
 
 settings = get_settings()
 
+# Check for required environment variables
+required_vars = [settings.DB]
+if not all(required_vars):
+    raise ValueError("Database environment variables are missing or invalid. Please check your .env file.")
+
+
 # Database Configuration
 DATABASE_PATH = Path(settings.DB)
 DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
