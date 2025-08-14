@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from sqlalchemy import event
 from sqlmodel import Session, create_engine
 
 from app.config.main import get_settings
@@ -18,6 +19,16 @@ DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 CONNECT_ARGS = {"check_same_thread": False}
 
 engine = create_engine(DATABASE_URL, echo=False, connect_args=CONNECT_ARGS)
+
+
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL;")
+    cursor.execute("PRAGMA synchronous=NORMAL;")
+    cursor.execute("PRAGMA cache_size=10000;")  # Increase cache size (in pages)
+    cursor.execute("PRAGMA temp_store=MEMORY;")
+    cursor.close()
 
 
 def get_db():
