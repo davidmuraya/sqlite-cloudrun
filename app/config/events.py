@@ -8,8 +8,7 @@ async def on_start_up() -> None:
     """
     Function to initialize the database.
     """
-    pass
-    # configure()
+    configure()
 
 
 async def on_shutdown() -> None:
