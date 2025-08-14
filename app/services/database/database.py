@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from sqlalchemy import event
-from sqlalchemy.pool import NullPool
 from sqlmodel import Session, create_engine
 
 from app.config.main import get_settings
@@ -19,7 +18,7 @@ DATABASE_PATH = Path(settings.DB)
 DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 CONNECT_ARGS = {"check_same_thread": False, "timeout": 30}  # When set to False: The connection can be shared across multiple threads.
 
-engine = create_engine(DATABASE_URL, echo=False, connect_args=CONNECT_ARGS, poolclass=NullPool)  # safe for multi-process / cloud)
+engine = create_engine(DATABASE_URL, echo=False, connect_args=CONNECT_ARGS)
 
 
 @event.listens_for(engine, "connect")
