@@ -2,9 +2,11 @@ from typing import List
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from sqlmodel import Session
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config.events import on_shutdown, on_start_up
 from app.logging.setup_logging import setup_logging
+from app.middleware.log_middleware import log_and_track_request_process_time
 from app.schema.product_models import ProductCreate, ProductRead, ProductUpdate
 from app.services.database.crud_product import (
     create_product,
@@ -18,6 +20,9 @@ from app.services.database.database import get_db
 setup_logging()
 
 app = FastAPI(on_shutdown=[on_shutdown], on_startup=[on_start_up])
+
+
+app.add_middleware(BaseHTTPMiddleware, dispatch=log_and_track_request_process_time)
 
 
 @app.post("/products/", response_model=ProductRead)
