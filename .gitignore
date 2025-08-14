@@ -1,0 +1,12 @@
+.env
+.venv/
+.idea/
+.pytest_cache/
+
+# data files e.g. excel files:
+app/data/
+.bash_history
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
