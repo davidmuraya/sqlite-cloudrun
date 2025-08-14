@@ -14,7 +14,7 @@ steps:
       - 'deploy'
       - 'sqlite-cloudrun'
       - '--image=gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA'
-      - '--set-env-vars=MSISDN_DATABASE_PATH=/gcs/core.db'
+      - '--set-env-vars=DB=/gcs/core.db'
       - '--region=us-central1'
       - '--project=$PROJECT_ID'
 
