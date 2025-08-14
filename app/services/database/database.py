@@ -27,7 +27,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.execute("PRAGMA journal_mode=WAL;")
     cursor.execute("PRAGMA synchronous=NORMAL;")
     cursor.execute("PRAGMA cache_size=10000;")  # Increase cache size (in pages)
-    cursor.execute("PRAGMA temp_store=MEMORY;")
+    cursor.execute("PRAGMA temp_store=FILE;")
     cursor.execute("PRAGMA busy_timeout=5000;")
     cursor.close()
 
