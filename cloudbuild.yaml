@@ -1,19 +1,19 @@
 steps:
   # Step 1: Build the Docker image using the Docker Cloud Builder
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/decodehash-app:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA', '.']
 
   # Step 2: Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/decodehash-app:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA']
 
   # Step 3: Deploy the Docker image to Google Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'run'
       - 'deploy'
-      - 'decodehash-app'
-      - '--image=gcr.io/$PROJECT_ID/decodehash-app:$COMMIT_SHA'
+      - 'sqlite-cloudrun'
+      - '--image=gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA'
       - '--set-env-vars=MSISDN_DATABASE_PATH=/gcs/core.db'
       - '--region=us-central1'
       - '--project=$PROJECT_ID'
@@ -24,7 +24,7 @@ steps:
       - 'run'
       - 'services'
       - 'update-traffic'
-      - 'decodehash-app'
+      - 'sqlite-cloudrun'
       - '--to-latest'
       - '--region=us-central1'
       - '--project=$PROJECT_ID'
