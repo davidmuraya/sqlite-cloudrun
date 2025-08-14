@@ -4,6 +4,7 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Response, status
 from sqlmodel import Session
 
 from app.config.events import on_shutdown, on_start_up
+from app.logging.setup_logging import setup_logging
 from app.schema.product_models import ProductCreate, ProductRead, ProductUpdate
 from app.services.database.crud_product import (
     create_product,
@@ -14,13 +15,13 @@ from app.services.database.crud_product import (
 )
 from app.services.database.database import get_db
 
+setup_logging()
+
 app = FastAPI(on_shutdown=[on_shutdown], on_startup=[on_start_up])
 
 
 @app.post("/products/", response_model=ProductRead)
-async def create_product_endpoint(
-    product: ProductCreate, db: Session = Depends(get_db)
-):
+async def create_product_endpoint(product: ProductCreate, db: Session = Depends(get_db)):
     result = await create_product(db, product)
     # Commit handled in route handler
     db.commit()
@@ -46,9 +47,7 @@ async def read_products_endpoint(
 
 
 @app.patch("/products/{product_id}", response_model=ProductRead)
-async def update_product_endpoint(
-    product_id: int, product: ProductUpdate, db: Session = Depends(get_db)
-):
+async def update_product_endpoint(product_id: int, product: ProductUpdate, db: Session = Depends(get_db)):
     db_product = await update_product(db, product_id, product)
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
