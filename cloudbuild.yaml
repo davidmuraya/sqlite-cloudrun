@@ -15,6 +15,7 @@ steps:
       - 'sqlite-cloudrun'
       - '--image=gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA'
       - '--set-env-vars=DB=/gcs/core.db'
+      - '--add-gcs-bucket=bucket=database-project-sqlite-cloudrun,name=gcs,path=/gcs'
       - '--gcs-fuse-flags=write-global-max-blocks=1024,experimental-enable-rapid-appends,stat-cache-ttl=1s,type-cache-ttl=1s'
       - '--region=us-central1'
       - '--project=$PROJECT_ID'
