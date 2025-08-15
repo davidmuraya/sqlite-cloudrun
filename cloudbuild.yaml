@@ -21,7 +21,7 @@ steps:
           --project=$PROJECT_ID \
           --execution-environment=gen2 \
           --set-env-vars=DB=/gcs/core.db \
-          --add-volume=name=gcs,type=cloud-storage,bucket=database-project-sqlite-cloudrun,mount-options="write-global-max-blocks=8;experimental-enable-rapid-appends=true;metadata-cache-ttl-secs=1s;type-cache-max-size-mb=4" \
+          --add-volume=name=gcs,type=cloud-storage,bucket=database-project-sqlite-cloudrun,mount-options="experimental-enable-rapid-appends=true;metadata-cache-ttl-secs=5s;type-cache-max-size-mb=4" \
           --add-volume-mount=volume=gcs,mount-path=/gcs
 
   # Step 4: Update the traffic to point to the latest deployed revision
