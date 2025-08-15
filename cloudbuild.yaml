@@ -7,18 +7,25 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA']
 
-  # Step 3: Deploy the Docker image to Google Cloud Run
-  - name: 'gcr.io/cloud-builders/gcloud'
+  # Step 3: Deploy to Cloud Run Gen2 with GCSFuse mount options
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    entrypoint: 'bash'
     args:
-      - 'run'
-      - 'deploy'
-      - 'sqlite-cloudrun'
-      - '--image=gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA'
-      - '--set-env-vars=DB=/gcs/core.db'
-      - '--region=us-central1'
-      - '--project=$PROJECT_ID'
-      - '--mount=gcs-bucket=database-project-sqlite-cloudrun,mount-path=/gcs,options=write-global-max-blocks=10,experimental-enable-rapid-appends,stat-cache-ttl=1s,type-cache-ttl=1s'
+      - -c
+      - |
+        set -euo pipefail
 
+        gcloud beta run deploy sqlite-cloudrun \
+          --image=gcr.io/$PROJECT_ID/sqlite-cloudrun:$COMMIT_SHA \
+          --region=us-central1 \
+          --project=$PROJECT_ID \
+          --execution-environment=gen2 \
+          --set-env-vars=DB=/gcs/core.db \
+          --memory=512Mi \
+          --concurrency=1 \
+          --service-account=SERVICE_ACCOUNT_EMAIL \
+          --add-volume=name=gcs,type=cloud-storage,bucket=database-project-sqlite-cloudrun,mount-options="write-global-max-blocks=8;experimental-enable-rapid-appends=true;metadata-cache-ttl-secs=1s;type-cache-max-size-mb=4" \
+          --add-volume-mount=volume=gcs,mount-path=/gcs
 
   # Step 4: Update the traffic to point to the latest deployed revision
   - name: 'gcr.io/cloud-builders/gcloud'
