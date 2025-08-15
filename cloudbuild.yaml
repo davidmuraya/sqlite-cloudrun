@@ -21,9 +21,6 @@ steps:
           --project=$PROJECT_ID \
           --execution-environment=gen2 \
           --set-env-vars=DB=/gcs/core.db \
-          --memory=512Mi \
-          --concurrency=1 \
-          --service-account=SERVICE_ACCOUNT_EMAIL \
           --add-volume=name=gcs,type=cloud-storage,bucket=database-project-sqlite-cloudrun,mount-options="write-global-max-blocks=8;experimental-enable-rapid-appends=true;metadata-cache-ttl-secs=1s;type-cache-max-size-mb=4" \
           --add-volume-mount=volume=gcs,mount-path=/gcs
 
