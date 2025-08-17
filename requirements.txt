@@ -9,3 +9,8 @@ gunicorn
 
 # database
 sqlmodel
+
+# locust
+# faker
+
+python-multipart
