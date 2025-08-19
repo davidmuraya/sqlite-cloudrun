@@ -4,6 +4,7 @@
 
 This project explores whether Google Cloud Run can reliably run a FastAPI application using SQLite as the backend database, with the SQLite file stored in a Google Cloud Storage (GCS) bucket. The goal is to evaluate the feasibility, performance, and reliability of this architecture for transactional workloads.
 
+**This setup is experimental and not recommended for production workloads.**
 ---
 
 ## Key Implementation Details
