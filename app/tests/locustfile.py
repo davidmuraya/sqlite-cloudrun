@@ -11,7 +11,7 @@ class ProductApiUser(FastHttpUser):
     User class that simulates a user interacting with the Product API.
     """
 
-    host = "https://sqlite-cloudrun-555528739632.us-central1.run.app"
+    host = "https://sqlite-cloudrun.us-central1.run.app"
     created_product_ids = []
 
     @task(5)
