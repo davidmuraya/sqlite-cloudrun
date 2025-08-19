@@ -5,7 +5,7 @@ from sqlmodel import Session
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config.events import on_shutdown, on_start_up
-from app.logging.setup_logging import setup_logging
+from app.logging.logging_config import setup_logging
 from app.middleware.log_middleware import log_and_track_request_process_time
 from app.schema.product_models import ProductCreate, ProductRead, ProductUpdate
 from app.services.database.crud_product import (
