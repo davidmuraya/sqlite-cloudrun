@@ -36,7 +36,7 @@ COPY --from=builder /install /usr/local
 COPY --from=builder /build/app ./app
 
 # Note: Tom Christie, the creator of Uvicorn, has explicitly advised against using multiple threads with Uvicorn.
-CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker -t 60 --max-requests 100 --max-requests-jitter 50 app.main:app
+CMD exec gunicorn --bind :$PORT --workers 1 --worker-class uvicorn.workers.UvicornWorker -t 60 --max-requests 1000 --max-requests-jitter 50 app.main:app
 
 
 # localhost
