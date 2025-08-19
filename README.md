@@ -5,7 +5,6 @@
 This project explores whether Google Cloud Run can reliably run a FastAPI application using SQLite as the backend database, with the SQLite file stored in a Google Cloud Storage (GCS) bucket. The goal is to evaluate the feasibility, performance, and reliability of this architecture for transactional workloads.
 
 **This setup is experimental and not recommended for production workloads.**
----
 
 ## Key Implementation Details
 
@@ -104,6 +103,12 @@ This project explores whether Google Cloud Run can reliably run a FastAPI applic
     - Build and push the Docker image.
     - Deploy to Cloud Run with the GCS bucket mounted.
     - Set environment variables and mount options for optimal SQLite performance.
+
+4. **Cloud Run Service Settings for Testing:**
+    - The Cloud Run service is configured with:
+        - **Maximum number of instances:** `1`
+        - **Maximum number of concurrent requests:** `1000`
+    - This setup ensures all requests are handled by a single instance, which is important for SQLite file consistency and for stress-testing the application's concurrency handling.
 
 ### Running Load Tests
 
