@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.config.events import on_shutdown, on_start_up
 from app.logging.logging_config import setup_logging
-from app.middleware.log_middleware import log_and_track_request_process_time
+from app.middleware.process_time_middleware import add_process_time_header
 from app.schema.product_models import ProductCreate, ProductRead, ProductUpdate
 from app.services.database.crud_product import (
     create_product,
@@ -22,7 +22,7 @@ setup_logging()
 app = FastAPI(on_shutdown=[on_shutdown], on_startup=[on_start_up])
 
 
-app.add_middleware(BaseHTTPMiddleware, dispatch=log_and_track_request_process_time)
+app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
 
 
 @app.post("/products/", response_model=ProductRead)

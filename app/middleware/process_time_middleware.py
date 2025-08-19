@@ -10,7 +10,7 @@ def calculate_process_time(start: float) -> float:
     return round(time.perf_counter() - start, 3)
 
 
-async def log_and_track_request_process_time(request: Request, call_next):
+async def add_process_time_header(request: Request, call_next):
     """
     Middleware to measure and record the processing time for each HTTP request.
 
