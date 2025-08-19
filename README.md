@@ -126,6 +126,8 @@ SQLite expects a POSIX-compliant filesystem with proper locking and random write
     locust -f app/tests/locustfile.py
     ```
     - Open the Locust web UI and start the test to simulate API usage.
+    - Screenshot showing test results of sending 7000 read/write/update/delete requests in a span of 5 mins:
+      <img width="1342" height="840" alt="image" src="https://github.com/user-attachments/assets/7213fe35-9303-47ed-b3ca-09051fcad260" />
 
 ---
 
