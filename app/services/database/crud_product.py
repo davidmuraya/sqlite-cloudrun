@@ -7,7 +7,7 @@ from app.services.database.models import Product
 
 
 async def create_product(session: Session, product_create: ProductCreate) -> Product:
-    product = Product(**product_create.dict())
+    product = Product.model_validate(product_create)
     session.add(product)
     return product
 
@@ -18,17 +18,13 @@ async def get_product(session: Session, product_id: int) -> Optional[Product]:
     return result.first()
 
 
-async def get_products(
-    session: Session, skip: int = 0, limit: int = 100
-) -> List[Product]:
+async def get_products(session: Session, skip: int = 0, limit: int = 100) -> List[Product]:
     statement = select(Product).offset(skip).limit(limit)
     result = session.exec(statement)
     return result.all()
 
 
-async def update_product(
-    session: Session, product_id: int, product_update: ProductUpdate
-) -> Optional[Product]:
+async def update_product(session: Session, product_id: int, product_update: ProductUpdate) -> Optional[Product]:
     product = await get_product(session, product_id)
     if not product:
         return None
