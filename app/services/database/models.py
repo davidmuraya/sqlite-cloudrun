@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
-from app.services.database.database import engine
+from app.services.database.session import engine
 
 
 class Product(SQLModel, table=True):

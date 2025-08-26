@@ -32,10 +32,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.close()
 
 
-def get_db():
+def get_session():
     """Yields a SQLModel Session instance."""
-    db = Session(engine)
-    try:
-        yield db
-    finally:
-        db.close()
+    with Session(engine) as session:
+        yield session

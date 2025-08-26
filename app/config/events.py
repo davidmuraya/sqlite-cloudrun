@@ -1,6 +1,6 @@
 from app.config.main import get_settings
-from app.services.database.database import engine
 from app.services.database.models import configure
+from app.services.database.session import engine
 
 settings = get_settings()
 

@@ -15,7 +15,7 @@ from app.services.database.crud_product import (
     get_products,
     update_product,
 )
-from app.services.database.database import get_db
+from app.services.database.session import get_session
 
 setup_logging()
 
@@ -26,7 +26,7 @@ app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
 
 
 @app.post("/products/", response_model=ProductRead)
-async def create_product_endpoint(product: ProductCreate, db: Session = Depends(get_db)):
+async def create_product_endpoint(product: ProductCreate, db: Session = Depends(get_session)):
     result = await create_product(db, product)
     # Commit handled in route handler
     db.commit()
@@ -35,7 +35,7 @@ async def create_product_endpoint(product: ProductCreate, db: Session = Depends(
 
 
 @app.get("/products/{product_id}", response_model=ProductRead)
-async def read_product_endpoint(product_id: int, db: Session = Depends(get_db)):
+async def read_product_endpoint(product_id: int, db: Session = Depends(get_session)):
     result = await get_product(db, product_id)
     if not result:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -46,13 +46,13 @@ async def read_product_endpoint(product_id: int, db: Session = Depends(get_db)):
 async def read_products_endpoint(
     skip: int = Query(0, alias="skip", ge=0),
     limit: int = Query(100, alias="limit", ge=1),
-    db: Session = Depends(get_db),
+    db: Session = Depends(get_session),
 ):
     return await get_products(db, skip=skip, limit=limit)
 
 
 @app.patch("/products/{product_id}", response_model=ProductRead)
-async def update_product_endpoint(product_id: int, product: ProductUpdate, db: Session = Depends(get_db)):
+async def update_product_endpoint(product_id: int, product: ProductUpdate, db: Session = Depends(get_session)):
     db_product = await update_product(db, product_id, product)
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -62,7 +62,7 @@ async def update_product_endpoint(product_id: int, product: ProductUpdate, db: S
 
 
 @app.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_product_endpoint(product_id: int, db: Session = Depends(get_db)):
+async def delete_product_endpoint(product_id: int, db: Session = Depends(get_session)):
     deleted = await delete_product(db, product_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Product not found")
